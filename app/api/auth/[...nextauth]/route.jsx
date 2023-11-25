@@ -51,6 +51,61 @@ export const authOptions = {
             },
         }),  
     ],
+    callbacks:{
+        async jwt({ token, user, session, trigger }) {
+            console.log("jwt callback", { token, user, session });
+            if (trigger === "update" && session?.name ) {
+                token.name = session.name;
+                const userWithPosts = await prisma.user.findUnique({
+                    where: {
+                        id: token.id,
+                    },
+                    include: {
+                        posts: true,
+                    },
+                });
+        
+                if (userWithPosts) {
+                    token.posts = userWithPosts.posts;
+                }
+            }
+        
+            if (user) {
+                return {
+                    ...token,
+                    id: user.id,
+                    address: user.address,
+                    posts:user.posts
+                };
+            }
+        
+            const newUser = await prisma.user.update({
+                where: {
+                    id: token.id,
+                },
+                data: {
+                    name: token.name,
+                },
+            });
+        
+            console.log(newUser);
+            return token;
+        },
+     async session ({session, token, user}){
+     console.log("session callback", {session,token,user});
+     return{
+        ...session,
+        user:{
+            ...session.user,
+            id:token.id,
+            address:token.address,
+            name:token.name,
+            posts:token.posts
+        }
+     }
+
+     },
+    },
     secret: process.env.SECRET,
     session: {
         strategy: "jwt",

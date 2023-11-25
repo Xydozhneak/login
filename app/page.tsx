@@ -1,15 +1,14 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+"use client";
+import Start from "./components/Start";
 import User from "./components/User";
+import { useSession } from "next-auth/react";
 
-export default async function Home() {
-  const session = await getServerSession(authOptions);
+export default function Home() {
+  const { data: session } = useSession();
   return (
-    <section>
-      <h1>Home</h1>
-      <h2>SSR</h2>
-      <pre>{JSON.stringify(session)}</pre>
-      <User />
+    <section className=" flex justify-center items-center">
+      {session?.user && <User />}
+      {!session?.user && <Start />}
     </section>
   );
 }

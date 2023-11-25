@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Provider from "./context/AuthContext";
 import ToasterContext from "./context/ToasterContext";
+import { UserProvider } from "./context/PostContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Provider>
           <ToasterContext />
-          {children}
+          <UserProvider>{children}</UserProvider>
         </Provider>
       </body>
     </html>

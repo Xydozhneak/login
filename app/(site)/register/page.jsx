@@ -5,7 +5,7 @@ import axios from "axios";
 import {toast} from 'react-hot-toast';
 
 export default function Register() {
-    const [data, setData] = useState({name:'', email:'', password:''});
+    const [data, setData] = useState({name:'', email:'', password:'', address: ''});
     const registerUser = async (e)=>{
         e.preventDefault()
         axios.post('/api/register', data).then(()=> toast.success("user has been register") ) 
@@ -62,17 +62,30 @@ export default function Register() {
                   />
                 </div>
               </div>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+                  Address
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="address"
+                    name="address"
+                    type="address"
+                    autoComplete="address"
+                    required
+                    value={data.address}
+                    onChange={e =>setData({...data, address: e.target.value})}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
   
               <div>
                 <div className="flex items-center justify-between">
                   <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                     Password
                   </label>
-                  <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
-                    </a>
-                  </div>
+               
                 </div>
                 <div className="mt-2">
                   <input
